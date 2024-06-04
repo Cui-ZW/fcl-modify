@@ -480,7 +480,8 @@ bool sphereTriangleDistance(const Sphere<S>& sp, const Transform3<S>& tf,
       Vector3<S> project_p = P1 * result.parameterization[0] + P2 * result.parameterization[1] + P3 * result.parameterization[2];
       Vector3<S> dir = o - project_p;
       dir.normalize();
-      if(p1) { *p1 = o - dir * sp.radius; *p1 = tf.inverse(Eigen::Isometry) * (*p1); }
+      // if(p1) { *p1 = o - dir * sp.radius; *p1 = tf.inverse(Eigen::Isometry) * (*p1); }
+      if(p1) { *p1 = o - dir * sp.radius; }// cuizw: we want to obtain nearest point in world frame
       if(p2) *p2 = project_p;
       return true;
     }
@@ -500,7 +501,8 @@ bool sphereTriangleDistance(const Sphere<S>& sp, const Transform3<S>& tf1,
                             S* dist, Vector3<S>* p1, Vector3<S>* p2)
 {
   bool res = detail::sphereTriangleDistance(sp, tf1, tf2 * P1, tf2 * P2, tf2 * P3, dist, p1, p2);
-  if(p2) *p2 = tf2.inverse(Eigen::Isometry) * (*p2);
+  // if(p2) *p2 = tf2.inverse(Eigen::Isometry) * (*p2);  // remove by czw, we want to obtained the nearest points at world
+  
 
   return res;
 }
